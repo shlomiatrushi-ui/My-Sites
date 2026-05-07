@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TryWork — גלה את המקצוע שלך</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Heebo', sans-serif; background: #f7f8f6; color: #1a1a1a; min-height: 100vh; }
+.container { max-width: 720px; margin: 0 auto; padding: 0 20px 60px; }
+nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0 22px; border-bottom: 1px solid #e8e8e4; margin-bottom: 32px; }
+.logo { font-size: 19px; font-weight: 600; color: #1a1a1a; display: flex; align-items: center; gap: 9px; cursor: pointer; text-decoration: none; }
+.logo-mark { background: #1D9E75; color: #fff; font-size: 13px; font-weight: 600; padding: 4px 9px; border-radius: 7px; letter-spacing: 0.3px; }
+.nav-links { display: flex; gap: 24px; font-size: 14px; color: #666; }
+.nav-links span { cursor: pointer; transition: color 0.15s; }
+.nav-links span:hover { color: #1a1a1a; }
+.screen { display: none; }
+.screen.active { display: block; }
+/* HOME */
+.hero { text-align: center; padding: 48px 0 36px; }
+.hero h1 { font-size: 32px; font-weight: 600; line-height: 1.25; margin-bottom: 14px; color: #1a1a1a; }
+.hero p { font-size: 16px; color: #666; max-width: 440px; margin: 0 auto 32px; line-height: 1.7; }
+.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-green { background: #1D9E75; color: #fff; border: none; padding: 13px 28px; border-radius: 9px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: 'Heebo', sans-serif; transition: background 0.15s; }
+.btn-green:hover { background: #0F6E56; }
+.btn-outline { background: transparent; color: #1D9E75; border: 1.5px solid #1D9E75; padding: 12px 28px; border-radius: 9px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: 'Heebo', sans-serif; transition: background 0.15s; }
+.btn-outline:hover { background: #edfaf5; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 36px; }
+.step-card { background: #fff; border: 1px solid #e8e8e4; border-radius: 14px; padding: 20px; text-align: center; }
+.step-num { font-size: 11px; font-weight: 600; color: #1D9E75; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; }
+.step-card h3 { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+.step-card p { font-size: 13px; color: #888; line-height: 1.55; }
+/* FORM */
+.form-section { background: #fff; border: 1px solid #e8e8e4; border-radius: 14px; padding: 24px; margin-bottom: 16px; }
+.form-section h2 { font-size: 16px; font-weight: 500; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+.section-icon { color: #1D9E75; font-size: 18px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-group label { font-size: 13px; color: #666; }
+.form-group input, .form-group select, .form-group textarea {
+  padding: 9px 13px; border: 1px solid #ddd; border-radius: 8px;
+  font-size: 14px; background: #fff; color: #1a1a1a; font-family: 'Heebo', sans-serif;
+  transition: border-color 0.15s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #1D9E75; }
+.form-group textarea { resize: vertical; min-height: 90px; }
+.tags { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 4px; }
+.tag { padding: 7px 16px; border-radius: 24px; font-size: 13px; border: 1px solid #ddd; cursor: pointer; color: #666; background: #fff; transition: all 0.15s; font-family: 'Heebo', sans-serif; }
+.tag:hover { border-color: #5DCAA5; color: #0F6E56; }
+.tag.selected { background: #edfaf5; border-color: #5DCAA5; color: #0F6E56; font-weight: 500; }
+.btn-full { width: 100%; padding: 13px; background: #1D9E75; color: #fff; border: none; border-radius: 9px; font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 10px; font-family: 'Heebo', sans-serif; transition: background 0.15s; }
+.btn-full:hover { background: #0F6E56; }
+.back-link { font-size: 13px; color: #999; cursor: pointer; text-align: center; display: block; margin-top: 14px; transition: color 0.15s; }
+.back-link:hover { color: #1a1a1a; }
+/* RESULTS */
+.results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.results-header h2 { font-size: 20px; font-weight: 500; }
+.count-badge { font-size: 13px; color: #888; }
+.filter-bar { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 22px; }
+.filter-chip { padding: 6px 16px; border: 1px solid #ddd; border-radius: 24px; font-size: 13px; color: #666; cursor: pointer; background: #fff; transition: all 0.15s; font-family: 'Heebo', sans-serif; }
+.filter-chip:hover { border-color: #5DCAA5; color: #0F6E56; }
+.filter-chip.active { background: #edfaf5; border-color: #5DCAA5; color: #0F6E56; font-weight: 500; }
+.match-list { display: flex; flex-direction: column; gap: 16px; }
+.match-card { background: #fff; border: 1px solid #e8e8e4; border-radius: 14px; padding: 20px; display: flex; gap: 16px; }
+.match-card.top { border: 2px solid #5DCAA5; }
+.co-logo { width: 48px; height: 48px; border-radius: 10px; background: #edfaf5; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600; color: #0F6E56; flex-shrink: 0; }
+.match-info { flex: 1; }
+.match-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; flex-wrap: wrap; gap: 6px; }
+.match-header h3 { font-size: 16px; font-weight: 500; }
+.top-badge { font-size: 11px; background: #1D9E75; color: #fff; padding: 2px 10px; border-radius: 20px; margin-right: 8px; }
+.score-badge { font-size: 12px; padding: 3px 11px; border-radius: 20px; background: #edfaf5; color: #0F6E56; font-weight: 500; }
+.match-meta { font-size: 13px; color: #888; margin-bottom: 10px; }
+.match-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+.match-tag { font-size: 11px; padding: 3px 11px; border-radius: 20px; background: #f5f5f2; color: #666; }
+.match-actions { display: flex; gap: 9px; }
+.btn-sm-green { padding: 8px 18px; background: #1D9E75; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'Heebo', sans-serif; transition: background 0.15s; }
+.btn-sm-green:hover { background: #0F6E56; }
+.btn-sm-outline { padding: 8px 18px; background: transparent; color: #666; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; cursor: pointer; font-family: 'Heebo', sans-serif; transition: all 0.15s; }
+.btn-sm-outline:hover { background: #f5f5f2; }
+/* COMPANY DETAIL */
+.co-detail-hero { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 22px; }
+.co-detail-logo { width: 64px; height: 64px; border-radius: 14px; background: #edfaf5; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 600; color: #0F6E56; flex-shrink: 0; }
+.co-detail-title h2 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+.co-detail-title p { font-size: 14px; color: #888; margin-bottom: 10px; }
+.detail-section { background: #fff; border: 1px solid #e8e8e4; border-radius: 14px; padding: 22px; margin-bottom: 14px; }
+.detail-section h3 { font-size: 15px; font-weight: 500; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.detail-section p { font-size: 14px; color: #666; line-height: 1.75; }
+.check-row { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: #555; margin-bottom: 10px; }
+.check-row:last-child { margin-bottom: 0; }
+.check-icon { color: #1D9E75; font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.stat-box { background: #f7f8f6; border-radius: 10px; padding: 14px; text-align: center; }
+.stat-num { font-size: 26px; font-weight: 600; color: #1D9E75; }
+.stat-label { font-size: 12px; color: #888; margin-top: 3px; }
+.review-card { background: #f7f8f6; border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+.review-card:last-child { margin-bottom: 0; }
+.review-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.reviewer-av { width: 34px; height: 34px; border-radius: 50%; background: #edfaf5; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #0F6E56; flex-shrink: 0; }
+.reviewer-name { font-size: 14px; font-weight: 500; }
+.reviewer-date { font-size: 12px; color: #aaa; }
+.stars { color: #EF9F27; font-size: 14px; margin-right: auto; }
+.review-text { font-size: 13px; color: #666; line-height: 1.65; }
+/* CONFIRM */
+.confirm-card { background: #fff; border: 1px solid #e8e8e4; border-radius: 14px; padding: 36px; text-align: center; }
+.confirm-icon-wrap { width: 68px; height: 68px; border-radius: 50%; background: #edfaf5; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 32px; }
+.confirm-card h2 { font-size: 22px; font-weight: 500; margin-bottom: 10px; }
+.confirm-card > p { font-size: 14px; color: #888; margin-bottom: 24px; line-height: 1.7; }
+.confirm-details { background: #f7f8f6; border-radius: 10px; padding: 18px; text-align: right; margin-bottom: 24px; }
+.confirm-row { display: flex; justify-content: space-between; font-size: 14px; padding: 6px 0; border-bottom: 1px solid #eee; }
+.confirm-row:last-child { border-bottom: none; }
+.confirm-row span:first-child { color: #888; }
+.confirm-row span:last-child { font-weight: 500; }
+/* COMPANY REG */
+.co-reg-header { text-align: center; padding: 32px 0 24px; }
+.co-reg-header h2 { font-size: 26px; font-weight: 500; margin-bottom: 10px; }
+.co-reg-header p { font-size: 15px; color: #666; line-height: 1.7; max-width: 440px; margin: 0 auto; }
+.benefits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 24px 0; }
+.benefit-card { background: #fff; border: 1px solid #e8e8e4; border-radius: 14px; padding: 18px; display: flex; gap: 14px; }
+.benefit-icon { width: 40px; height: 40px; border-radius: 10px; background: #edfaf5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 20px; }
+.benefit-text h4 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+.benefit-text p { font-size: 13px; color: #888; line-height: 1.55; }
+.success-center { text-align: center; padding: 60px 0; }
+.success-center h2 { font-size: 24px; font-weight: 500; margin: 20px 0 10px; }
+.success-center p { font-size: 15px; color: #888; line-height: 1.7; max-width: 380px; margin: 0 auto 32px; }
+@media (max-width: 560px) {
+  .steps, .form-grid, .benefits-grid, .stat-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <nav>
+    <a class="logo" onclick="showScreen('screen-home')">
+      <span class="logo-mark">TW</span> TryWork
+    </a>
+    <div class="nav-links">
+      <span onclick="showScreen('screen-home')">לחיילים</span>
+      <span onclick="showScreen('screen-company-reg')">לחברות</span>
+      <span>צור קשר</span>
+    </div>
+  </nav>
+
+  <!-- HOME -->
+  <div id="screen-home" class="screen active">
+    <div class="hero">
+      <h1>גלה את המקצוע שלך<br>לפני שאתה בוחר אותו</h1>
+      <p>חיילים משוחררים? התאם בין שאיפות הקריירה שלך לבין ביקורי עבודה אמיתיים בחברות מובילות — לפני שמתחילים ללמוד.</p>
+      <div class="hero-btns">
+        <button class="btn-green" onclick="showScreen('screen-form')">אני מחפש חשיפה לעבודה ←</button>
+        <button class="btn-outline" onclick="showScreen('screen-company-reg')">אני חברה</button>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">שלב 1</div>
+        <h3>ספר לנו עליך</h3>
+        <p>תחומי עניין, מיקום, סוג המשרד שאתה מחפש</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">שלב 2</div>
+        <h3>קבל התאמות</h3>
+        <p>האלגוריתם שלנו מוצא חברות שמתאימות לפרופיל שלך</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">שלב 3</div>
+        <h3>קבע ביקור</h3>
+        <p>הגע לחברה ליום חשיפה וראה את המקצוע בפועל</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div id="screen-form" class="screen">
+    <div class="form-section">
+      <h2><span class="section-icon">👤</span> פרטים אישיים</h2>
+      <div class="form-grid">
+        <div class="form-group"><label>שם פרטי</label><input type="text" placeholder="ליאם" /></div>
+        <div class="form-group"><label>גיל</label><input type="number" placeholder="21" /></div>
+        <div class="form-group full"><label>עיר מגורים</label>
+          <select><option>תל אביב</option><option>ירושלים</option><option>חיפה</option><option>ראשון לציון</option><option>פתח תקווה</option><option>אחר</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="form-section">
+      <h2><span class="section-icon">💼</span> תחום עניין</h2>
+      <div class="tags">
+        <div class="tag selected" onclick="toggleTag(this)">היי-טק / פיתוח</div>
+        <div class="tag" onclick="toggleTag(this)">עיצוב / UX</div>
+        <div class="tag" onclick="toggleTag(this)">שיווק / דיגיטל</div>
+        <div class="tag" onclick="toggleTag(this)">פיננסים</div>
+        <div class="tag" onclick="toggleTag(this)">רפואה / פארמה</div>
+        <div class="tag" onclick="toggleTag(this)">משפטים</div>
+        <div class="tag" onclick="toggleTag(this)">אדריכלות / בנייה</div>
+      </div>
+    </div>
+    <div class="form-section">
+      <h2><span class="section-icon">🏢</span> סוג חברה מועדף</h2>
+      <div class="tags">
+        <div class="tag selected" onclick="toggleTag(this)">סטארטאפ קטן</div>
+        <div class="tag" onclick="toggleTag(this)">חברה בינונית</div>
+        <div class="tag" onclick="toggleTag(this)">תאגיד גדול</div>
+        <div class="tag" onclick="toggleTag(this)">ממשלתי / ציבורי</div>
+      </div>
+    </div>
+    <button class="btn-full" onclick="showScreen('screen-results')">מצא התאמות ←</button>
+    <span class="back-link" onclick="showScreen('screen-home')">← חזרה</span>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="screen-results" class="screen">
+    <div class="results-header">
+      <h2>ההתאמות שלך</h2>
+      <span class="count-badge">3 חברות נמצאו</span>
+    </div>
+    <div class="filter-bar">
+      <div class="filter-chip active">הכל</div>
+      <div class="filter-chip">תל אביב</div>
+      <div class="filter-chip">ירושלים</div>
+      <div class="filter-chip">סטארטאפ</div>
+    </div>
+    <div class="match-list">
+      <div class="match-card top">
+        <div class="co-logo">W</div>
+        <div class="match-info">
+          <div class="match-header">
+            <h3>Wix.com <span class="top-badge">התאמה מובילה</span></h3>
+            <span class="score-badge">97% התאמה</span>
+          </div>
+          <div class="match-meta">📍 תל אביב &nbsp;·&nbsp; 👥 חברה גדולה &nbsp;·&nbsp; פיתוח ועיצוב</div>
+          <div class="match-tags"><span class="match-tag">Full Stack</span><span class="match-tag">Product</span><span class="match-tag">R&D</span></div>
+          <div class="match-actions">
+            <button class="btn-sm-green" onclick="showScreen('screen-confirm')">קבע ביקור</button>
+            <button class="btn-sm-outline" onclick="showScreen('screen-company-detail')">פרטים נוספים</button>
+          </div>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="co-logo" style="background:#dbeeff; color:#185FA5;">M</div>
+        <div class="match-info">
+          <div class="match-header">
+            <h3>Mobileye</h3>
+            <span class="score-badge" style="background:#dbeeff; color:#185FA5;">84% התאמה</span>
+          </div>
+          <div class="match-meta">📍 ירושלים &nbsp;·&nbsp; 👥 תאגיד &nbsp;·&nbsp; הנדסה ו-AI</div>
+          <div class="match-tags"><span class="match-tag">Embedded</span><span class="match-tag">Computer Vision</span></div>
+          <div class="match-actions">
+            <button class="btn-sm-green" onclick="showScreen('screen-confirm')">קבע ביקור</button>
+            <button class="btn-sm-outline" onclick="showScreen('screen-company-detail')">פרטים נוספים</button>
+          </div>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="co-logo" style="background:#fce8f0; color:#993556;">O</div>
+        <div class="match-info">
+          <div class="match-header">
+            <h3>OurCrowd</h3>
+            <span class="score-badge" style="background:#fce8f0; color:#993556;">76% התאמה</span>
+          </div>
+          <div class="match-meta">📍 ירושלים &nbsp;·&nbsp; 👥 בינוני &nbsp;·&nbsp; פיננסים וטק</div>
+          <div class="match-tags"><span class="match-tag">VC</span><span class="match-tag">FinTech</span></div>
+          <div class="match-actions">
+            <button class="btn-sm-green" onclick="showScreen('screen-confirm')">קבע ביקור</button>
+            <button class="btn-sm-outline" onclick="showScreen('screen-company-detail')">פרטים נוספים</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="back-link" onclick="showScreen('screen-form')">← שנה פרטים</span>
+  </div>
+
+  <!-- COMPANY DETAIL -->
+  <div id="screen-company-detail" class="screen">
+    <div class="co-detail-hero">
+      <div class="co-detail-logo">W</div>
+      <div class="co-detail-title">
+        <h2>Wix.com</h2>
+        <p>פלטפורמת בניית אתרים מובילה בעולם · תל אביב</p>
+        <span class="score-badge">97% התאמה לפרופיל שלך</span>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h3>🏢 על החברה</h3>
+      <p>Wix היא חברת טק ישראלית עם למעלה מ-5,000 עובדים ברחבי העולם. החברה מפתחת פלטפורמה לבניית אתרים שמשמשת מאות מיליוני משתמשים. במשרדי תל אביב יושבים צוותי R&D, Product, Design ועוד.</p>
+    </div>
+    <div class="detail-section">
+      <h3>👁️ מה תראה ביום הביקור?</h3>
+      <div class="check-row"><span class="check-icon">✓</span><span>ישיבת צוות פיתוח אמיתית (Sprint Planning)</span></div>
+      <div class="check-row"><span class="check-icon">✓</span><span>הדגמה של תהליך כתיבת קוד ו-Code Review</span></div>
+      <div class="check-row"><span class="check-icon">✓</span><span>שיחה עם מפתחים בכירים על הקריירה שלהם</span></div>
+      <div class="check-row"><span class="check-icon">✓</span><span>סיור בקמפוס וארוחת צהריים עם הצוות</span></div>
+    </div>
+    <div class="detail-section">
+      <h3>📊 נתונים</h3>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-num">47</div><div class="stat-label">ביקורים עד היום</div></div>
+        <div class="stat-box"><div class="stat-num">4.8</div><div class="stat-label">דירוג ממוצע</div></div>
+        <div class="stat-box"><div class="stat-num">12</div><div class="stat-label">מקומות פנויים</div></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h3>💬 ביקורות ממבקרים קודמים</h3>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="reviewer-av">TK</div>
+          <div><div class="reviewer-name">תומר כהן</div><div class="reviewer-date">מרץ 2025</div></div>
+          <div class="stars">★★★★★</div>
+        </div>
+        <div class="review-text">חוויה מדהימה. הגעתי בלי שום מושג מה זה פיתוח, יצאתי עם תמונה ברורה וידעתי שזה בדיוק מה שאני רוצה ללמוד. הצוות של Wix היה סבלני ומסביר פנים.</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="reviewer-av" style="background:#dbeeff; color:#185FA5;">ML</div>
+          <div><div class="reviewer-name">מיה לוי</div><div class="reviewer-date">פברואר 2025</div></div>
+          <div class="stars">★★★★☆</div>
+        </div>
+        <div class="review-text">מאוד מעניין לראות את העבודה מקרוב. הבנתי שפיתוח זה לא רק לשבת לבד מול מחשב — יש המון עבודת צוות ותקשורת. שינה לי את התפיסה.</div>
+      </div>
+    </div>
+    <button class="btn-full" onclick="showScreen('screen-confirm')">קבע ביקור ב-Wix ←</button>
+    <span class="back-link" onclick="showScreen('screen-results')">← חזרה לתוצאות</span>
+  </div>
+
+  <!-- CONFIRM -->
+  <div id="screen-confirm" class="screen">
+    <div class="confirm-card">
+      <div class="confirm-icon-wrap">✅</div>
+      <h2>נקבע לך ביקור ב-Wix!</h2>
+      <p>פנינו לחברה בשמך. תוך 48 שעות תקבל אישור עם כל הפרטים למייל.</p>
+      <div class="confirm-details">
+        <div class="confirm-row"><span>חברה</span><span>Wix.com</span></div>
+        <div class="confirm-row"><span>מיקום</span><span>תל אביב, קמפוס Wix</span></div>
+        <div class="confirm-row"><span>תאריך מוצע</span><span>שלישי, 20 במאי 2025</span></div>
+        <div class="confirm-row"><span>שעה</span><span>09:00 – 13:00</span></div>
+        <div class="confirm-row"><span>תחום</span><span>פיתוח Full Stack</span></div>
+      </div>
+      <button class="btn-full" onclick="showScreen('screen-home')">חזרה לדף הבית</button>
+    </div>
+  </div>
+
+  <!-- COMPANY REG -->
+  <div id="screen-company-reg" class="screen">
+    <div class="co-reg-header">
+      <h2>הצטרפו כחברה ל-TryWork</h2>
+      <p>פתחו את הדלת לדור הבא של אנשי מקצוע. חיילים משוחררים מוכשרים ועם מוטיבציה גבוהה — מחכים לגלות אתכם.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">👥</div>
+        <div class="benefit-text"><h4>גיוס עתידי</h4><p>פגשו מועמדים מוכשרים לפני שהם מסיימים ללמוד</p></div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">❤️</div>
+        <div class="benefit-text"><h4>מיתוג מעסיק</h4><p>בנו מוניטין חיובי בקרב הדור הצעיר</p></div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">⚙️</div>
+        <div class="benefit-text"><h4>פשוט וגמיש</h4><p>אתם קובעים את מספר המבקרים והתדירות</p></div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📈</div>
+        <div class="benefit-text"><h4>נתונים ותובנות</h4><p>קבלו דוח על המבקרים ומשוב אחרי כל ביקור</p></div>
+      </div>
+    </div>
+    <div class="form-section">
+      <h2>פרטי החברה</h2>
+      <div class="form-grid">
+        <div class="form-group"><label>שם החברה</label><input type="text" placeholder="Acme Ltd." /></div>
+        <div class="form-group"><label>תחום פעילות</label>
+          <select><option>היי-טק</option><option>פיננסים</option><option>בריאות</option><option>קמעונאות</option><option>אחר</option></select>
+        </div>
+        <div class="form-group"><label>עיר</label>
+          <select><option>תל אביב</option><option>ירושלים</option><option>חיפה</option><option>אחר</option></select>
+        </div>
+        <div class="form-group"><label>גודל החברה</label>
+          <select><option>1–20 עובדים</option><option>21–100</option><option>101–500</option><option>500+</option></select>
+        </div>
+        <div class="form-group full"><label>שם איש קשר + אימייל</label><input type="text" placeholder="דנה כהן · dana@company.com" /></div>
+        <div class="form-group full"><label>תארו את יום הביקור שתציעו</label>
+          <textarea placeholder="מה יראו המבקרים? מה תכנית היום? כמה מבקרים בו-זמנית?"></textarea>
+        </div>
+      </div>
+    </div>
+    <button class="btn-full" onclick="showScreen('screen-company-success')">שלח בקשת הצטרפות ←</button>
+    <span class="back-link" onclick="showScreen('screen-home')">← חזרה לדף הבית</span>
+  </div>
+
+  <!-- COMPANY SUCCESS -->
+  <div id="screen-company-success" class="screen">
+    <div class="success-center">
+      <div style="font-size:60px;">🎉</div>
+      <h2>קיבלנו את הבקשה שלכם!</h2>
+      <p>צוות TryWork יחזור אליכם תוך 2 ימי עסקים לתיאום הפרופיל שלכם ופתיחת המשרד לביקורים.</p>
+      <button class="btn-green" onclick="showScreen('screen-home')">חזרה לדף הבית</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function toggleTag(el) {
+  el.classList.toggle('selected');
+}
+</script>
+</body>
+</html>
